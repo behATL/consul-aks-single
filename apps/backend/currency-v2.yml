@@ -25,6 +25,7 @@ spec:
         version: "2"
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
+        "consul.hashicorp.com/connect-service-protocol": "http"
     spec:
       serviceAccountName: currency
       containers:
