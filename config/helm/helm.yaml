@@ -1,0 +1,38 @@
+global:
+  name: jconsul
+  domain: consul
+  datacenter: josh1
+  image: hashicorp/consul-enterprise:1.9.0-ent-beta1
+
+  gossipEncryption:
+    secretName: consul-gossip-encryption-key
+    secretKey: key
+
+  tls:
+    enabled: true
+
+enableConsulNamespaces: true
+
+acls:
+  manageSystemACLs: true
+  createReplicationToken: true
+
+server:
+  replicas: 3
+  bootstrapExpect: 3
+
+client:
+  enabled: true
+  grpc: true
+
+ui:
+  enabled: true
+  service:
+    type: LoadBalancer
+
+connectInject:
+  enabled: true
+
+syncCatalog:
+  enabled: true
+  k8sDenyNamespaces: ["kube-system", "kube-public"]
