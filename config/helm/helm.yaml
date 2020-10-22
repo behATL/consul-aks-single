@@ -36,3 +36,6 @@ connectInject:
 syncCatalog:
   enabled: true
   k8sDenyNamespaces: ["kube-system", "kube-public"]
+
+controller:       # Enabled CRDs
+  enabled: true

@@ -52,6 +52,9 @@ export CONSUL_HTTP_TOKEN=$(kubectl get secret consul-bootstrap-acl-token -o json
 consul config write config/consul/proxy-defaults.hcl
 consul intention create -allow '*/*' '*/*'
 
+consul config write /config/consul/service-defaults-currency-all.hcl
+consul config write /config/consul/service-router-currency-all.hcl
+
 kubectl apply -f apps/frontend
 kubectl apply -f apps/backend
 ```

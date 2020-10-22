@@ -1,3 +1,10 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceDefaults
+metadata:
+  name: currency-v2
+  namespace: default
+spec:
+  protocol: http
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -25,7 +32,6 @@ spec:
         version: "2"
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
-        "consul.hashicorp.com/connect-service-protocol": "http"
     spec:
       serviceAccountName: currency-v2
       containers:

@@ -1,3 +1,10 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceDefaults
+metadata:
+  name: payments
+  namespace: default
+spec:
+  protocol: http
 ---
 apiVersion: v1
 kind: ServiceAccount
@@ -22,7 +29,6 @@ spec:
         app: payments
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
-        "consul.hashicorp.com/connect-service-protocol": "http"
         "consul.hashicorp.com/connect-service-upstreams": "currency-all:9094"
     spec:
       serviceAccountName: payments
