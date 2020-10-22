@@ -23,7 +23,7 @@ spec:
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
         "consul.hashicorp.com/connect-service-protocol": "http"
-        "consul.hashicorp.com/connect-service-upstreams": "currency:9094"
+        "consul.hashicorp.com/connect-service-upstreams": "currency-all:9094"
     spec:
       serviceAccountName: payments
       containers:
@@ -36,7 +36,7 @@ spec:
           - name: LISTEN_ADDR
             value: "0.0.0.0:9093"
           - name: UPSTREAM_URIS
-            value: "http://127.0.0.1:9094"
+            value: "http://127.0.0.1:9094/v2, http://127.0.0.1:9094/"
           - name: MESSAGE
             value: "Payments response"
           - name: NAME

@@ -2,7 +2,7 @@
 apiVersion: v1
 kind: ServiceAccount
 metadata:
-  name: currency
+  name: currency-v2
 
 ---
 apiVersion: apps/v1
@@ -10,26 +10,26 @@ kind: Deployment
 metadata:
   name: currency-v2
   labels:
-    app: currency
+    app: currency-v2
     version: "2"
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: currency
+      app: currency-v2
       version: "2"
   template:
     metadata:
       labels:
-        app: currency
+        app: currency-v2
         version: "2"
       annotations:
         "consul.hashicorp.com/connect-inject": "true"
         "consul.hashicorp.com/connect-service-protocol": "http"
     spec:
-      serviceAccountName: currency
+      serviceAccountName: currency-v2
       containers:
-      - name: currency
+      - name: currency-v2
         image: "nicholasjackson/fake-service:v0.7.8"
         imagePullPolicy: Always
         ports:
@@ -40,9 +40,9 @@ spec:
           - name: UPSTREAM_URIS
             value: ""
           - name: MESSAGE
-            value: "Currency response"
+            value: "Currency V2 response"
           - name: NAME
-            value: "currency"
+            value: "currency-v2"
           - name: SERVER_TYPE
             value: "http"
           - name: ERROR_RATE
