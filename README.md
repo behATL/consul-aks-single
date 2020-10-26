@@ -16,7 +16,7 @@ helm repo add hashicorp https://helm.releases.hashicorp.com
 You can use the Azure CLI to  get the credentials for each cluster.
 
 ```
-az aks get-credentials --name aks1 --resource-group hashicorp-consul-pov  -f ./config/kube/aks1.yaml
+az aks get-credentials --name aks1 --resource-group jwolfer-aks-single -f ./config/kube/aks1.yaml
 KUBECONFIG=./config/kube/aks1.yaml kubectl config view --merge --flatten > ~/.kube/config
 ```
 
