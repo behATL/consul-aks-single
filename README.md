@@ -33,6 +33,26 @@ helm install consul hashicorp/consul -f ./config/helm/helm.yaml --debug
 kubectl get secret consul-federation -o yaml > consul-federation-secret.yaml
 ```
 
+Add .Consul resolution to kube-dns
+```
+CONSUL_DNS_IP=$(kubectl get svc consul-dns -o jsonpath='{.spec.clusterIP}')
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  consul.server: |
+    consul {
+           errors
+           cache 30
+           forward . $CONSUL_DNS_IP
+    }
+EOF
+kubectl delete pod --namespace kube-system -l k8s-app=kube-dns
+```
+
 Deploy Monitoring
 
 ```
