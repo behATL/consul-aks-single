@@ -2,7 +2,7 @@ apiVersion: consul.hashicorp.com/v1alpha1
 kind: ServiceDefaults
 metadata:
   name: currency-all
-  namespace: default
+  namespace: default    #k8s namespace!
 spec:
   protocol: http
 ---
@@ -10,17 +10,26 @@ apiVersion: consul.hashicorp.com/v1alpha1
 kind: ServiceRouter
 metadata:
   name: currency-all
+  # namespace: k8s-namespace    # Is this actually k8s namespace? How to tie to source Consul NS?
 spec:
   routes:
     - match:
         http:
-          pathPrefix: /v2
+          pathPrefix: /server2/
       destination:
         service: currency-v2
-        namespace: default
+        namespace: default    # Consul dest namespace
+        prefixRewrite: "/"
     - match:
         http:
           pathPrefix: /
       destination:
         service: currency
-        namespace: default
+        namespace: default    # Consul dest namespace
+    # - match:
+    #     http:
+    #       pathPrefix: /some-nonsense/
+    #   destination:
+    #     service: currency
+    #     namespace: default    # Consul dest namespace
+    #     prefixRewrite: "/non-sense/"

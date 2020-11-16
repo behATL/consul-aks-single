@@ -4,7 +4,7 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "hashicorp-consul-pov" {
-  name     = "jwolfer-aks-single"
+  name     = "jwolfer-aks-1"
   location = "eastus"
 }
 

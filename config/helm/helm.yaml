@@ -1,8 +1,9 @@
 global:
-  name: jconsul
+  name: consul
   domain: consul
   datacenter: josh1
   image: hashicorp/consul-enterprise:1.9.0-ent-beta1
+  imageEnvoy: "envoyproxy/envoy-alpine:v1.15.0"       # 1.15.0 Updates Intentions MUCH faster than 1.14.x
 
   gossipEncryption:
     secretName: consul-gossip-encryption-key
@@ -11,11 +12,15 @@ global:
   tls:
     enabled: true
 
-enableConsulNamespaces: true
+  enableConsulNamespaces: true                        # CRDs won't setup Consul namespaces correctly if this is false (default)
 
-acls:
-  manageSystemACLs: true
-  createReplicationToken: true
+  # federation:                               # No federation since this is a single cluster deployment.
+  #   enabled: true
+  #   createFederationSecret: true
+
+  acls:
+    manageSystemACLs: true
+    createReplicationToken: true
 
 server:
   replicas: 3

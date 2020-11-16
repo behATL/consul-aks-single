@@ -36,7 +36,7 @@ spec:
       serviceAccountName: currency-v2
       containers:
       - name: currency-v2
-        image: "nicholasjackson/fake-service:v0.7.8"
+        image: "nicholasjackson/fake-service:v0.17.6"
         imagePullPolicy: Always
         ports:
         - containerPort: 9094

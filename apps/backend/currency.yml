@@ -33,7 +33,7 @@ spec:
       serviceAccountName: currency
       containers:
       - name: currency
-        image: "nicholasjackson/fake-service:v0.7.8"
+        image: "nicholasjackson/fake-service:v0.17.6"
         imagePullPolicy: Always
         ports:
         - containerPort: 9094
@@ -54,5 +54,5 @@ spec:
             value: "500"
           - name: ERROR_TYPE
             value: "http_error"
-          - name: TRACING_ZIPKIN
-            value: "http://jaeger-collector-default.service.aks1.consul:9411"
+          # - name: TRACING_ZIPKIN
+          #   value: "http://jaeger-collector-default.service.aks1.consul:9411"
