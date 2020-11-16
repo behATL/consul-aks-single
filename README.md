@@ -16,7 +16,7 @@ helm repo add hashicorp https://helm.releases.hashicorp.com
 You can use the Azure CLI to  get the credentials for each cluster.
 
 ```
-az aks get-credentials --name aks1 --resource-group hashicorp-consul-pov  -f ./config/kube/aks1.yaml
+az aks get-credentials --name aks1 --resource-group jwolfer-aks-single -f ./config/kube/aks1.yaml
 KUBECONFIG=./config/kube/aks1.yaml kubectl config view --merge --flatten > ~/.kube/config
 ```
 
@@ -33,6 +33,26 @@ helm install consul hashicorp/consul -f ./config/helm/helm.yaml --debug
 kubectl get secret consul-federation -o yaml > consul-federation-secret.yaml
 ```
 
+Add .Consul resolution to kube-dns
+```
+CONSUL_DNS_IP=$(kubectl get svc consul-dns -o jsonpath='{.spec.clusterIP}')
+cat <<EOF | kubectl apply -f -
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: coredns-custom
+  namespace: kube-system
+data:
+  consul.server: |
+    consul {
+           errors
+           cache 30
+           forward . $CONSUL_DNS_IP
+    }
+EOF
+kubectl delete pod --namespace kube-system -l k8s-app=kube-dns
+```
+
 Deploy Monitoring
 
 ```
@@ -42,18 +62,13 @@ kubectl apply -f grafana/grafana-service.yaml
 kubectl apply -f jaeger/jaeger-all-in-one-template-modified.yml
 ```
 
-## Configure Consul ENV variables
+## Deploy the sample application
+Deploy the Fake Service application into the cluster.
 
 ```
 export CONSUL_HTTP_SSL_VERIFY=false
 export CONSUL_HTTP_ADDR=https://$(kubectl get svc consul-ui -o json | jq -r '.status.loadBalancer.ingress[0].ip')
 export CONSUL_HTTP_TOKEN=$(kubectl get secret consul-bootstrap-acl-token -o json | jq -r '.data.token' | base64 -d)
-```
-
-## Deploy the sample application
-Deploy the Fake Service application into the cluster.
-
-```
 consul config write config/consul/proxy-defaults.hcl
 consul intention create -allow '*/*' '*/*'
 
