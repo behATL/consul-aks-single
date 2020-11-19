@@ -50,7 +50,7 @@ spec:
       serviceAccountName: web
       containers:
       - name: web
-        image: "nicholasjackson/fake-service:v0.18.1"
+        image: "nicholasjackson/fake-service:v0.18.1"     # https://hub.docker.com/r/nicholasjackson/fake-service
         imagePullPolicy: Always
         ports:
         - containerPort: 9090

@@ -93,7 +93,7 @@ kubectl apply -f grafana/grafana-service.yaml
 kubectl apply -f jaeger/jaeger-all-in-one-template-modified.yml
 ```
 
-## Configure Consul 
+## Configure Consul
 **Consul binary -> API access**
 ```
 export CONSUL_HTTP_SSL_VERIFY=false

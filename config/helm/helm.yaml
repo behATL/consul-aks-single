@@ -1,8 +1,8 @@
 global:
   name: consul
   domain: consul
-  datacenter: josh1
-  image: hashicorp/consul-enterprise:1.9.0-ent-rc1    # Select an image from: https://hub.docker.com/r/hashicorp/consul-enterprise/tags
+  datacenter: aks1
+  image: hashicorp/consul-enterprise:1.9.0-ent-beta3    # Select an image from: https://hub.docker.com/r/hashicorp/consul-enterprise/tags
   imageEnvoy: "envoyproxy/envoy-alpine:v1.15.0"       # 1.15.0 Updates Intentions MUCH faster than 1.14.x
 
   gossipEncryption:
