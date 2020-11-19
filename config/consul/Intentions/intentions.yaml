@@ -1,0 +1,13 @@
+apiVersion: consul.hashicorp.com/v1alpha1
+kind: ServiceIntentions
+metadata:
+  name: currency
+  namespace: default
+spec:
+  destination:
+    name: currency-all
+    namespace: blahblah
+  sources:
+    - name: payments
+      namespace: default
+      action: deny
