@@ -118,6 +118,8 @@ echo $CONSUL_HTTP_ADDR
 
 **Deploy the Fake Service application into the cluster.**
 
+*Be patient. Sometimes it takes 5 minutes or so for the application to be fully setup. Periodically refresh the web page for the web app and it will eventually connect and show the flow for the entire application.*
+
 ```
 kubectl apply -f apps/frontend
 kubectl apply -f apps/backend
