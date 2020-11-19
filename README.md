@@ -1,19 +1,38 @@
 # Consul Single AKS Learning environment
 
 ## Overview
-This repo provides the infrastructure needed to build an AKS cluster with an application using Consul service mesh.
+This repo provides the infrastructure needed to build a single AKS cluster with an application using Consul service mesh.
 The [Terraform folder](terraform) provides simple instructions to spin up this infrastructure.
 
+## Terraform Install
+Modify the terraform/variables.tf to use the appropriate Resource Group and Region.
+***IMPORTANT**: The resource group in this repo defaults to use my name in the resource group. Please change it to your own.*
+
+Provision the AKS cluster:
+```
+cd terraform
+terraform init
+terraform apply
+```
+
 ## Helm Setup
-Add the Consul helm chart to your repo after you've installed [HELM](https://helm.sh/docs/helm/helm_install/)
+
+ - Install helm. This can easily be done with a package manager.
+ - Add the Consul helm chart to your repo after you've installed [HELM](https://helm.sh/docs/helm/helm_install/)
 
 ```
 helm repo add hashicorp https://helm.releases.hashicorp.com
 ```
 
+ - If the hashicorp repo has previously been installed, you may need to update the chart to the latest version.
+```
+helm repo update
+helm search repo hashicorp/consul --versions
+```
 ## Connecting to AKS
 
-You can use the Azure CLI to  get the credentials for each cluster.
+Use the Azure CLI to  get the credentials for each cluster.
+***NOTE:** You will need to change the resource group in the az command to match the resource group you used.*
 
 ```
 az aks get-credentials --name aks1 --resource-group jwolfer-aks-single -f ./config/kube/aks1.yaml
@@ -23,7 +42,8 @@ KUBECONFIG=./config/kube/aks1.yaml kubectl config view --merge --flatten > ~/.ku
 ## Deploy Connect to AKS1
 Our AKS1 cluster will run Grafana and Jaeger endpoints that the other AKS clusters will share.
 
-Deploy Consul
+**Deploy Consul**
+*NOTE: Replace your license in the license command.*
 
 ```
 kubectl config use-context aks1
@@ -33,7 +53,7 @@ helm install consul hashicorp/consul -f ./config/helm/helm.yaml --debug
 kubectl get secret consul-federation -o yaml > consul-federation-secret.yaml
 ```
 
-Add .Consul resolution to kube-dns
+**Add .Consul resolution to kube-dns**
 ```
 CONSUL_DNS_IP=$(kubectl get svc consul-dns -o jsonpath='{.spec.clusterIP}')
 cat <<EOF | kubectl apply -f -
@@ -52,8 +72,9 @@ data:
 EOF
 kubectl delete pod --namespace kube-system -l k8s-app=kube-dns
 ```
+*Deleted DNS pods will be automatically re-created automatically by the k8s deployment, but will now use the new DNS forwarder*
 
-Deploy Monitoring
+**Deploy Monitoring**
 
 ```
 #helm install stable/prometheus

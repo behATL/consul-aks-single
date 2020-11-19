@@ -50,7 +50,7 @@ spec:
       serviceAccountName: web
       containers:
       - name: web
-        image: "nicholasjackson/fake-service:v0.17.6"
+        image: "nicholasjackson/fake-service:v0.18.1"
         imagePullPolicy: Always
         ports:
         - containerPort: 9090
@@ -73,5 +73,5 @@ spec:
             value: "90ms"
           - name: TIMING_VARIANCE
             value: "10"
-          # - name: TRACING_ZIPKIN
-          #   value: "http://jaeger-collector-default.service.aks1.consul:9411"
+          - name: TRACING_ZIPKIN
+            value: "http://jaeger-collector-default.service.aks1.consul:9411"

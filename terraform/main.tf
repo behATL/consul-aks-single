@@ -4,8 +4,8 @@ provider "azurerm" {
 }
 
 resource "azurerm_resource_group" "hashicorp-consul-pov" {
-  name     = "jwolfer-aks-1"
-  location = "eastus"
+  name     = var.resource_group
+  location = var.region
 }
 
 resource "azurerm_kubernetes_cluster" "aks1" {

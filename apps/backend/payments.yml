@@ -34,7 +34,7 @@ spec:
       serviceAccountName: payments
       containers:
       - name: payments
-        image: "nicholasjackson/fake-service:v0.17.6"
+        image: "nicholasjackson/fake-service:v0.18.1"
         imagePullPolicy: Always
         ports:
         - containerPort: 9093
@@ -49,7 +49,7 @@ spec:
             value: "payments"
           - name: SERVER_TYPE
             value: "http"
-          # - name: TRACING_ZIPKIN
-          #   value: "http://jaeger-collector-default.service.aks1.consul:9411"
+          - name: TRACING_ZIPKIN
+            value: "http://jaeger-collector-default.service.aks1.consul:9411"
           - name:  HTTP_CLIENT_REQUEST_TIMEOUT
             value: "10s"
