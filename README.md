@@ -39,18 +39,23 @@ az aks get-credentials --name aks1 --resource-group jwolfer-aks-single -f ./conf
 KUBECONFIG=./config/kube/aks1.yaml kubectl config view --merge --flatten > ~/.kube/config
 ```
 
-## Deploy Connect to AKS1
-Our AKS1 cluster will run Grafana and Jaeger endpoints that the other AKS clusters will share.
+## Deploy Consul Connect to AKS1
 
-**Deploy Consul**
-*NOTE: Replace your license in the license command.*
+**Configure Consul**
+- Replace your license in the license command.
+- "consul keygen" requires that the Consul binary is installed and in your path.
 
 ```
 kubectl config use-context aks1
 kubectl create secret generic consul-gossip-encryption-key --from-literal=key="$(consul keygen)"
 kubectl create secret generic consul-license --from-literal=key="<your license>"
+```
+**Install Consul**
+- Parameters in the helm chart can be customized first, such as the Consul Enterprise version
+- Make sure to run this from the repo root, as the path to the helm config is static.
+
+```
 helm install consul hashicorp/consul -f ./config/helm/helm.yaml --debug
-kubectl get secret consul-federation -o yaml > consul-federation-secret.yaml
 ```
 
 **Add .Consul resolution to kube-dns**
@@ -74,7 +79,8 @@ kubectl delete pod --namespace kube-system -l k8s-app=kube-dns
 ```
 *Deleted DNS pods will be automatically re-created automatically by the k8s deployment, but will now use the new DNS forwarder*
 
-**Deploy Monitoring**
+## Deploy Monitoring
+Our AKS1 cluster will run Grafana and Jaeger endpoints that the other AKS clusters will share.
 
 ```
 #helm install stable/prometheus
@@ -83,7 +89,7 @@ kubectl apply -f grafana/grafana-service.yaml
 kubectl apply -f jaeger/jaeger-all-in-one-template-modified.yml
 ```
 
-## Deploy the sample application
+## Deploy the application pods
 Deploy the Fake Service application into the cluster.
 
 ```
