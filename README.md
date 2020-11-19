@@ -13,6 +13,7 @@ Provision the AKS cluster:
 cd terraform
 terraform init
 terraform apply
+cd ..
 ```
 
 ## Helm Setup
@@ -35,6 +36,7 @@ Use the Azure CLI to  get the credentials for each cluster.
 ***NOTE:** You will need to change the resource group in the az command to match the resource group you used.*
 
 ```
+rm ./config/kube/aks1.yaml
 az aks get-credentials --name aks1 --resource-group jwolfer-aks-single -f ./config/kube/aks1.yaml
 KUBECONFIG=./config/kube/aks1.yaml kubectl config view --merge --flatten > ~/.kube/config
 ```
@@ -52,8 +54,8 @@ kubectl create secret generic consul-license --from-literal=key="<your license>"
 ```
 **Install Consul**
 - Parameters in the helm chart can be customized first, such as the Consul Enterprise version
+- All the pod configs for Jaeger rely on the Consul DC being "aks1". Don't change the Consul DC name.
 - Make sure to run this from the repo root, as the path to the helm config is static.
-
 ```
 helm install consul hashicorp/consul -f ./config/helm/helm.yaml --debug
 ```
@@ -107,10 +109,28 @@ consul config write config/consul/proxy-defaults.hcl
 consul intention create -allow '*/*' '*/*'
 ```
 
-## Deploy the Fake Service application pods
-Deploy the Fake Service application into the cluster.
+**Get the Consul UI address**
+```
+echo $CONSUL_HTTP_ADDR
+```
+
+## Deploy the Fake Service application
+
+**Deploy the Fake Service application into the cluster.**
 
 ```
 kubectl apply -f apps/frontend
 kubectl apply -f apps/backend
+```
+
+**Get the address of the Fake Service Web server**
+- This takes a little while for the AKS load balancer to assign the public IP.
+- kube shows the "EXTERNAL-IP" as "\<pending>" until it is assigned. Be patient.
+```
+watch kubectl get services web
+```
+**Access the Fake Service UI**
+The UI can be accessed via:
+```
+echo "http://$(kubectl get svc web -o json | jq -r '.status.loadBalancer.ingress[0].ip')/ui"
 ```
