@@ -82,23 +82,35 @@ kubectl delete pod --namespace kube-system -l k8s-app=kube-dns
 ## Deploy Monitoring
 Our AKS1 cluster will run Grafana and Jaeger endpoints that the other AKS clusters will share.
 
+**Install Grafana via Helm**
 ```
-#helm install stable/prometheus
-helm install grafana stable/grafana
+helm repo add grafana https://grafana.github.io/helm-charts
+helm install grafana grafana/grafana
+```
+**Install grafana and jaeger**
+```
 kubectl apply -f grafana/grafana-service.yaml
 kubectl apply -f jaeger/jaeger-all-in-one-template-modified.yml
 ```
 
-## Deploy the application pods
-Deploy the Fake Service application into the cluster.
-
+## Configure Consul 
+**Consul binary -> API access**
 ```
 export CONSUL_HTTP_SSL_VERIFY=false
 export CONSUL_HTTP_ADDR=https://$(kubectl get svc consul-ui -o json | jq -r '.status.loadBalancer.ingress[0].ip')
 export CONSUL_HTTP_TOKEN=$(kubectl get secret consul-bootstrap-acl-token -o json | jq -r '.data.token' | base64 -d)
+```
+
+**Configure proxy-defaults and default allow intention**
+```
 consul config write config/consul/proxy-defaults.hcl
 consul intention create -allow '*/*' '*/*'
+```
 
+## Deploy the Fake Service application pods
+Deploy the Fake Service application into the cluster.
+
+```
 kubectl apply -f apps/frontend
 kubectl apply -f apps/backend
 ```
