@@ -1,5 +1,5 @@
 variable "resource_group" {
-  default = "jwolfer-aks-single"
+  default = "bharvey-aks-single"
 }
 
 variable "region" {
