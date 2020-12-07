@@ -11,7 +11,8 @@ resource "azurerm_resource_group" "hashicorp-consul-pov" {
     se-region = "South Strategic"
     purpose = "demonstration and testing"
     ttl = "-1"
-    terraform = "true}
+    terraform = "true"
+    }
 }
 
 resource "azurerm_kubernetes_cluster" "aks1" {
