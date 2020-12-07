@@ -8,7 +8,10 @@ resource "azurerm_resource_group" "hashicorp-consul-pov" {
   location = var.region
   tags = {
     owner = "Bryce Harvey"
-    region = "South Strategic"}
+    se-region = "South Strategic"
+    purpose = "demonstration and testing"
+    ttl = "-1"
+    terraform = "true}
 }
 
 resource "azurerm_kubernetes_cluster" "aks1" {
