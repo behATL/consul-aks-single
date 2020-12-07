@@ -6,6 +6,9 @@ provider "azurerm" {
 resource "azurerm_resource_group" "hashicorp-consul-pov" {
   name     = var.resource_group
   location = var.region
+  tags = {
+    owner = "Bryce Harvey"
+    region = "South Strategic"}
 }
 
 resource "azurerm_kubernetes_cluster" "aks1" {
