@@ -39,5 +39,10 @@ resource "azurerm_kubernetes_cluster" "aks1" {
 
   tags = {
     Environment = "Production"
+    owner = "Bryce Harvey"
+    se-region = "South Strategic"
+    purpose = "demonstration and testing"
+    ttl = "-1"
+    terraform = "true"
   }
 }
