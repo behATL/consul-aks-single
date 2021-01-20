@@ -2,7 +2,7 @@ provider "azurerm" {
   version = "=2.0.0"
   features {}
 }
-#Comment line 1/20 test
+#Comment line 1/21 test
 
 resource "azurerm_resource_group" "hashicorp-consul-pov" {
   name     = var.resource_group
