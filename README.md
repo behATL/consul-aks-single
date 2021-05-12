@@ -37,7 +37,7 @@ Use the Azure CLI to  get the credentials for each cluster.
 
 ```
 rm ./config/kube/aks1.yaml
-az aks get-credentials --name aks1 --resource-group jwolfer-aks-single -f ./config/kube/aks1.yaml
+az aks get-credentials --name aks1 --resource-group bharvey-aks-single -f ./config/kube/aks1.yaml
 KUBECONFIG=./config/kube/aks1.yaml kubectl config view --merge --flatten > ~/.kube/config
 ```
 
