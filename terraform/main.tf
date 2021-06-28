@@ -2,7 +2,7 @@ provider "azurerm" {
   version = "=2.0.0"
   features {}
 }
-#Comment line 5/24 workshop
+#Comment line 6/27 - Fiserv workshop
 
 resource "azurerm_resource_group" "hashicorp-consul-pov" {
   name     = var.resource_group
